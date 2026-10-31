@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cardiology-in-motion.github.io/sitemap.xml
