@@ -35,9 +35,8 @@
 @property --sweep {
   syntax: "<angle>";
   inherits: false;
-  initial-value: 372deg;
+  initial-value: 380deg;
 }
-
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 16px; }
 body {
@@ -82,18 +81,47 @@ a:hover { color: var(--accent); }
 .hero .link-arrow { margin-top: 28px; }
 
 .logo {
+  display: grid;
   width: 100%;
   max-width: 460px;
   justify-self: end;
-  filter: var(--logo-filter);
-  -webkit-mask-image: conic-gradient(from 205deg, #000 var(--sweep), transparent calc(var(--sweep) + 12deg));
-  mask-image: conic-gradient(from 205deg, #000 var(--sweep), transparent calc(var(--sweep) + 12deg));
-  animation: draw 2.4s cubic-bezier(0.45, 0, 0.2, 1) both;
 }
-@keyframes draw { from { --sweep: -12deg; } to { --sweep: 372deg; } }
+/* The logo image is stacked twice: .logo-art draws the vessels with the
+   sweep and has the words cut out; .logo-words shows only the words, so the
+   lettering appears whole instead of being split by the sweep. */
+.logo img { grid-area: 1 / 1; width: 100%; filter: var(--logo-filter); }
+.logo-words {
+  clip-path: polygon(18% 30.4%, 65.6% 30.4%, 65.6% 56.5%, 21.7% 56.5%, 21.7% 46.6%, 18% 46.6%);
+  animation: words 1.2s ease 0.8s both;
+}
+@keyframes words { from { opacity: 0; } to { opacity: 1; } }
+.logo-art {
+  clip-path: polygon(evenodd, 0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+    18% 30.4%, 65.6% 30.4%, 65.6% 56.5%, 21.7% 56.5%, 21.7% 46.6%, 18% 46.6%, 18% 30.4%);
+  /* The vessel is drawn by a clockwise sweep around the circle's centre,
+     starting at the inner end of the stroke (bottom, just left of the gap)
+     and finishing at the tip of the outer tail.
+     Layer 1: the main sweep.
+     Layer 2: everywhere except a small zone around the tail tip, which sits
+     directly under the inner end and would otherwise appear at the start.
+     Layer 3: the same sweep offset by a turn, uncovering that zone only on
+     the second pass. Result = layer 1 AND (layer 2 OR layer 3). */
+  -webkit-mask-image:
+    conic-gradient(from 165deg at 42.2% 44%, #000 var(--sweep), transparent calc(var(--sweep) + 10deg)),
+    radial-gradient(ellipse 7% 8% at 47.2% 92.9%, transparent 98%, #000 100%),
+    conic-gradient(from 105deg at 42.2% 44%, #000 calc(var(--sweep) - 300deg), transparent calc(var(--sweep) - 290deg));
+  mask-image:
+    conic-gradient(from 165deg at 42.2% 44%, #000 var(--sweep), transparent calc(var(--sweep) + 10deg)),
+    radial-gradient(ellipse 7% 8% at 47.2% 92.9%, transparent 98%, #000 100%),
+    conic-gradient(from 105deg at 42.2% 44%, #000 calc(var(--sweep) - 300deg), transparent calc(var(--sweep) - 290deg));
+  -webkit-mask-composite: source-in, source-over;
+  mask-composite: intersect, add;
+  animation: draw 2.6s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+@keyframes draw { from { --sweep: -10deg; } to { --sweep: 380deg; } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .logo { animation: none; }
+  .logo img { animation: none; }
 }
 
 .app { background: var(--panel); padding-block: 88px; }
