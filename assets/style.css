@@ -131,6 +131,7 @@ a:hover { color: var(--accent); }
 .lede { font-size: 1.2rem; margin-top: 14px; max-width: 30em; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 28px; }
 .badge { width: 150px; height: 50px; }
+.badge-play { width: 192px; height: 74px; margin: -12px; }
 .soon, .note { color: var(--muted); font-size: 0.95rem; }
 .app-links { display: flex; flex-wrap: wrap; gap: 6px 20px; margin-top: 22px; font-size: 0.95rem; }
 .features li { padding-block: 15px; border-top: 1px solid var(--line); }
